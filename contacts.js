@@ -36,7 +36,6 @@ async function addContact(name, email, phone) {
   };
   const contactsData = await listContacts();
   const filter = contactsData.filter((contact) => contact.id === newContact.id);
-
   if (filter.length === 0) {
     contactsData.push(newContact);
     fs.writeFile(contactsPath, JSON.stringify(contactsData));
