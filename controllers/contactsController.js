@@ -1,10 +1,10 @@
-const contacts = require("../db/contacts.json");
+const contacts = require("../models/modelСontacts.json");
 const Joi = require("joi");
 const { v4: uuidv4 } = require("uuid");
 
 const fs = require("fs").promises;
 const path = require("path");
-const contactsPath = path.join("./db/contacts.json");
+const contactsPath = path.join("../models/modelСontacts.json");
 
 function notFound(res, contactId) {
   const contact = contacts.find((contact) => contact.id === contactId);
