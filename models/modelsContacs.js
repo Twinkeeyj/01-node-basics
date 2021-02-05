@@ -17,7 +17,9 @@ const ContactSchema = new Schema({
     type: String,
     required: true,
   },
-});
+},
+{ versionKey: false, timestamps: true },
+);
 
 const Contact = mongoose.model("Contact", ContactSchema);
 
