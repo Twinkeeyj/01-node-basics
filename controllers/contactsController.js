@@ -2,6 +2,7 @@ const {
   Types: { ObjectId },
 } = require("mongoose");
 const Contact = require("../models/modelsContacs.js");
+const Joi = require("joi");
 
 function validateid(req, res, next) {
   const {
@@ -12,6 +13,31 @@ function validateid(req, res, next) {
     return res.status(400).send("Your id is not valid");
   }
 
+  next();
+}
+function validationContacts(req, res, next) {
+  const validationRules = Joi.object({
+    name: Joi.string(),
+    email: Joi.string(),
+    phone: Joi.string()
+
+  });
+  const validationResult = validationRules.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).send({ message: "missing required name field" });
+  }
+  next();
+}
+function updateValidationRules(req, res, next) {
+  const validationRules = Joi.object({
+    name: Joi.string(),
+    email: Joi.string(),
+    phone: Joi.string(),
+  }).min(1);
+  const validationResult = validationRules.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).send({ message: "missing required name field" });
+  }
   next();
 }
 
@@ -83,4 +109,6 @@ module.exports = {
   newContact,
   contactDelete,
   updateContact,
+  validationContacts,
+  updateValidationRules,
 };
