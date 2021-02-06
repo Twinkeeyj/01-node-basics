@@ -17,10 +17,9 @@ function validateid(req, res, next) {
 }
 function validationContacts(req, res, next) {
   const validationRules = Joi.object({
-    name: Joi.string(),
-    email: Joi.string(),
-    phone: Joi.string()
-
+    name: Joi.string().alphanum().min(3).max(30).required(),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+    phone: Joi.string().length(10).pattern(/^[0-9]+$/).required()
   });
   const validationResult = validationRules.validate(req.body);
   if (validationResult.error) {
@@ -30,9 +29,9 @@ function validationContacts(req, res, next) {
 }
 function updateValidationRules(req, res, next) {
   const validationRules = Joi.object({
-    name: Joi.string(),
-    email: Joi.string(),
-    phone: Joi.string(),
+    name: Joi.string().alphanum().min(3).max(30),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+    phone: Joi.string().length(10).pattern(/^[0-9]+$/)
   }).min(1);
   const validationResult = validationRules.validate(req.body);
   if (validationResult.error) {
