@@ -4,10 +4,11 @@ const {
   getContacts,
   getContactsById,
   newContact,
-  validationContacts,
+  validateid,
   contactDelete,
   updateContact,
-  updateValidationRules
+  validationContacts,
+  updateValidationRules,
 } = require("../controllers/contactsController.js");
 
 const router = Router();
@@ -15,9 +16,9 @@ const router = Router();
 router.use(logger("dev"));
 
 router.get("/", getContacts);
-router.get("/:contactId", getContactsById);
-router.post("/", validationContacts, newContact);
-router.delete("/:contactId", contactDelete);
-router.patch("/:contactId", updateValidationRules, updateContact);
+router.get("/:contactId", validateid, getContactsById);
+router.post("/",validationContacts, newContact);
+router.delete("/:contactId", validateid, contactDelete);
+router.patch("/:contactId",  updateValidationRules, validateid, updateContact);
 
 module.exports = router;
