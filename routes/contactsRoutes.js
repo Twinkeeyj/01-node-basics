@@ -7,18 +7,18 @@ const {
   validateid,
   contactDelete,
   updateContact,
-  validationContacts,
   updateValidationRules,
 } = require("../controllers/contactsController.js");
+const {auditToken}=require("../controllers/auth.controller")
 
 const router = Router();
 
 router.use(logger("dev"));
 
-router.get("/", getContacts);
-router.get("/:contactId", validateid, getContactsById);
-router.post("/",validationContacts, newContact);
-router.delete("/:contactId", validateid, contactDelete);
-router.patch("/:contactId",  updateValidationRules, validateid, updateContact);
+router.get("/",auditToken, getContacts);
+router.get("/:contactId",auditToken, validateid, getContactsById);
+router.post("/",auditToken, newContact);
+router.delete("/:contactId",auditToken, validateid, contactDelete);
+router.patch("/:contactId",auditToken,  updateValidationRules, validateid, updateContact);
 
 module.exports = router;

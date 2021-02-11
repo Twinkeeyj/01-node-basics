@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const contactsRouter = require("./routes/contactsRoutes.js");
+const usersRouter=require("./routes/userRoutes")
 
 dotenv.config();
 const PORT = process.env.port || 8080;
@@ -25,6 +26,7 @@ class Server {
   }
   initRoutes() {
     this.server.use("/api/contacts", contactsRouter);
+    this.server.use("/auth", usersRouter)
   }
   async connectToDb() {
     try {
