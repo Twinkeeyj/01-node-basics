@@ -25,7 +25,7 @@ class Server {
     );
   }
   initRoutes() {
-    this.server.use("/api/contacts", contactsRouter);
+    this.server.use("/api/contacs", contactsRouter);
     this.server.use("/auth", usersRouter)
   }
   async connectToDb() {
