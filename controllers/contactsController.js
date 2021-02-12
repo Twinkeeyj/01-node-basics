@@ -120,10 +120,10 @@ async function getContactsPage(req, res) {
 }
 async function getContactsSub(req, res) {
   const {
-    params: { sub },
+    params: { sub, page, limit },
   } = req;
 
-  const contacts = await Contact.paginate({ subscription: sub },{ limit: 5, page: 1}, function (err, result) {
+  const contacts = await Contact.paginate({ subscription: sub },{ limit: limit, page: page}, function (err, result) {
        return result.docs;
   });
   res.json(contacts);

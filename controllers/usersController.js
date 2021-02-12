@@ -6,8 +6,8 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-
-const session = require("express-session");
+const mongoose = require("mongoose");
+mongoose.set("useFindAndModify", false);
 
 dotenv.config();
 
@@ -32,6 +32,7 @@ async function newUser(req, res) {
     const user = await User.create({
       ...body,
       password: hashedPassword,
+      token: "",
     });
     const { subscription, email } = user;
     res.status(201).json({
@@ -68,6 +69,10 @@ async function login(req, res) {
     },
     process.env.TOKEN_SECRET
   );
+
+
+  await User.findByIdAndUpdate(user._id, { token: token });
+
   return res.status(200).json({
     token: token,
     user: {
@@ -77,39 +82,43 @@ async function login(req, res) {
   });
 }
 async function logoutUser(req, res) {
+
   const {
     params: { userId },
   } = req;
-  const authorizationHeader = req.get("Authorization");
 
   const findUser = await User.findById(userId);
 
-  // req.user.deleteToken(req.token, (err, user) => {
-  //   if (err) return res.status(400).send(err);
-  //   res.sendStatus(200).send("юхууу");
-  // });
-  // console.log(token);
   if (!findUser) {
     return res.status(401).send("Not authorized");
   }
 
-  authorizationHeader.replace(authorizationHeader, " ");
+  await User.findByIdAndUpdate(userId, { token: "" });
   return res.status(204).send("No Content");
 }
 
-// app.get("/api/logout", auth, function (req, res) {
-//   req.user.deleteToken(req.token, (err, user) => {
-//     if (err) return res.status(400).send(err);
-//     res.sendStatus(200);
-//   });
-// });
 async function currentUser(req, res) {
-  console.log(req);
-  const { email, subscription } = req.user;
-  return res.status(200).json({
-    email: email,
-    subscription: subscription,
-  });
+  const authorizationHeader = req.get("Authorization");
+  const token = authorizationHeader.replace("Bearer ", "");
+
+  const userTrue = await User.findOne({ token: token });
+
+  if (!userTrue) {
+    return res.status(401).send({ message: "Not authorized" });
+  }
+  return res.status(200).json({ email: userTrue.email, subscription: userTrue.subscription });
 }
 
-module.exports = { newUser, validationUser, login, logoutUser, currentUser };
+async function subNew(req,res) {
+  const {
+    params: { userid },
+  } = req;
+  const {  subscription}=req.body
+
+  if(subscription==="free"||"pro"||"premium"){
+    const newSub=await User.findByIdAndUpdate(userid, {subscription:subscription}, {new:true})
+   return res.status(201).json({email:newSub.email, subscription: newSub.subscription})
+  }
+}
+
+module.exports = { newUser, validationUser, login, logoutUser, currentUser,subNew };

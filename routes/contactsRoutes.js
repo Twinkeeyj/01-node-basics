@@ -17,7 +17,7 @@ const router = Router();
 
 router.use(logger("dev"));
 // ______
-router.get("/sub=:sub", getContactsSub);
+router.get("/sub=:sub&page=:page&limit=:limit", getContactsSub);
 router.get("/page=:page&limit=:limit", getContactsPage);
 // ________
 router.get("/",auditToken, getContacts);
