@@ -70,7 +70,6 @@ async function login(req, res) {
     process.env.TOKEN_SECRET
   );
 
-
   await User.findByIdAndUpdate(user._id, { token: token });
 
   return res.status(200).json({
@@ -82,7 +81,6 @@ async function login(req, res) {
   });
 }
 async function logoutUser(req, res) {
-
   const {
     params: { userId },
   } = req;
@@ -98,27 +96,21 @@ async function logoutUser(req, res) {
 }
 
 async function currentUser(req, res) {
-  const authorizationHeader = req.get("Authorization");
-  const token = authorizationHeader.replace("Bearer ", "");
+  const { email, subscription } = req.user;
 
-  const userTrue = await User.findOne({ token: token });
-
-  if (!userTrue) {
-    return res.status(401).send({ message: "Not authorized" });
-  }
-  return res.status(200).json({ email: userTrue.email, subscription: userTrue.subscription });
+  return res.status(200).json({ email: email, subscription: subscription });
 }
 
-async function subNew(req,res) {
+async function subNew(req, res) {
   const {
     params: { userid },
   } = req;
-  const {  subscription}=req.body
+  const { subscription } = req.body;
 
-  if(subscription==="free"||"pro"||"premium"){
-    const newSub=await User.findByIdAndUpdate(userid, {subscription:subscription}, {new:true})
-   return res.status(201).json({email:newSub.email, subscription: newSub.subscription})
+  if (subscription === "free" || subscription === "pro" || subscription === "premium") {
+    const newSub = await User.findByIdAndUpdate(userid, { subscription: subscription }, { new: true });
+    return res.status(201).json({ email: newSub.email, subscription: newSub.subscription });
   }
 }
 
-module.exports = { newUser, validationUser, login, logoutUser, currentUser,subNew };
+module.exports = { newUser, validationUser, login, logoutUser, currentUser, subNew };

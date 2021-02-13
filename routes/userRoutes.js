@@ -10,8 +10,8 @@ router.use(logger("dev"));
 router.post("/register", validationUser, newUser);
 router.post("/login", login );
 router.get("/logout/:userId",auditToken ,logoutUser);
-router.get("/current",  currentUser );
-router.patch("/user/:userid",  subNew );
+router.get("/current",auditToken,  currentUser );
+router.patch("/user/:userid", auditToken, subNew );
 ;
 
 module.exports = router;
