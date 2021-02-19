@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const contactsRouter = require("./routes/contactsRoutes.js");
 const usersRouter=require("./routes/userRoutes")
+const imageRouter=require("./routes/imageRouter")
 
 dotenv.config();
 const PORT = process.env.port || 8080;
@@ -27,6 +28,8 @@ class Server {
   initRoutes() {
     this.server.use("/api/contacs", contactsRouter);
     this.server.use("/auth", usersRouter)
+    this.server.use("/images", imageRouter)
+
   }
   async connectToDb() {
     try {
