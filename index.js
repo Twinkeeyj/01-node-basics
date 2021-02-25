@@ -5,10 +5,11 @@ const dotenv = require("dotenv");
 const contactsRouter = require("./routes/contactsRoutes.js");
 const usersRouter=require("./routes/userRoutes")
 const imageRouter=require("./routes/imageRouter")
+const sgMail = require("@sendgrid/mail");
 
 dotenv.config();
 const PORT = process.env.port || 8080;
-
+sgMail.setApiKey(process.env.EMAIL_TOKEN)
 class Server {
   start() {
     this.server = express();

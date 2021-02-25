@@ -18,6 +18,7 @@ const UserSchema = new Schema({
       type: String,
       },
     avatarURL: String,
+  verificationToken: String,
   },
 {timestamps: true },
 );

@@ -8,7 +8,8 @@ const {
   currentUser,
   subNew,
   newAvatar,
-  updateValidationAv
+  updateValidationAv,
+  confirmationEmail
 } = require("../controllers/usersController");
 const { auditToken } = require("../controllers/auth.controller");
 
@@ -37,5 +38,6 @@ router.get("/logout/:userId", auditToken, logoutUser);
 router.get("/current", auditToken, currentUser);
 router.patch("/user/:userid", auditToken, subNew);
 router.patch("/users/avatars", auditToken, upload.single("avatar"),updateValidationAv, newAvatar);
+router.get("/verify/:verificationToken", confirmationEmail)
 
 module.exports = router;
